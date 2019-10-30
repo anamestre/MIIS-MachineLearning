@@ -56,10 +56,10 @@ def plot_stem_weights(coef_total, n_total):
 			plt.show()
 
 #flatten = lambda l: [item for sublist in l for item in sublist]    
-dataset = load_svmlight_file("cod-rna.txt")
+dataset = load_svmlight_file("shuttle.txt")
 length = dataset[0].shape[0]
 mse_total, N_total, times_total, coef_total = [], [], [], []
-random_values = random.sample(range(1, length), 10)
+random_values = random.sample(range(1, length), 100)
 random_values.sort()
 for N in random_values:
     x, y = get_dataset(dataset, N)
@@ -74,16 +74,16 @@ for N in random_values:
     N_total.append(N)
     coef_total.append(coef)
 #new_cofs = [c[0] for c in coef_total]
-new_coefs = []
-for sublist in coef_total:
+#new_coefs = []
+"""for sublist in coef_total:
         for item in sublist:
-            new_coefs.append(item)
+            new_coefs.append(item)"""
 #print(new_coefs)
 #print("........")
 #print(coef_total)
 #print(coef_total)
-#plot_values(N_total, mse_total, "Accuracy score", "N", "Error")
-#plot_values(N_total, times_total, "CPU time", "N", "Time")
-plot_values(N_total, coef_total, "Weights", "N", "Weights")
+plot_values(N_total, mse_total, "Accuracy score", "N", "Error")
+plot_values(N_total, times_total, "CPU time", "N", "Time")
+#plot_values(N_total, coef_total, "Weights", "N", "Weights")
 #print(flatten(coef_total))
 #plot_stem_weights(flatten(coef_total), N_total)
