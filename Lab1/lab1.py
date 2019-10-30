@@ -5,11 +5,6 @@ Created on Wed Oct 16 19:13:16 2019
 @author: Ana Mestre
 """
 
-"""
-Ara mateix estic entrenant en LR per cada subset... potser el que hauria de fer es 
-entrenar-ho per tot i després predir per cada subset???
-
-"""
 from sklearn.datasets import load_svmlight_file
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score,mean_squared_error
@@ -17,6 +12,7 @@ from sklearn.model_selection import train_test_split
 import random, time
 from statistics import mean 
 from timeit import default_timer as timer
+import matplotlib.pyplot as plt
 
 def get_x_y(dataset):
     return dataset[0], dataset[1]
@@ -43,27 +39,37 @@ def plot_values(ns, values, text = "", labelx = "", labely = ""):
     plt.xlabel(labelx, fontsize = 10)
     plt.ylabel(labely, fontsize = 10)
     plt.plot(ns, values)
+    plt.show()
+
+def plot_stem_weights(coef_total, n_total):
+	for coef, n in zip(coef_total, n_total):
+		plt.figure()
+		markerline, stemlines, _ = plt.stem(coef)
+		plt.setp(stemlines, 'linestyle', 'dotted')
+		plt.title("Coefficients stem plot with N = " + str(n), fontsize = 24)
+		plt.show()
     
 
     
 dataset = load_svmlight_file("cadata.txt")
 length = dataset[0].shape[0]
 mse_total, N_total, times_total, coef_total = [], [], [], []
-random_values = random.sample(range(1, length), 50)
+random_values = random.sample(range(1, length), 10)
 random_values.sort()
 for N in random_values:
     x, y = get_dataset(dataset, N)
     coef, mse, times = linear_regression(x, y, N)
+    print(coef)
     ns = list(range(1, N + 1))
     times_total.append(times)
     mse_total.append(mse)
     N_total.append(N)
     coef_total.append(coef)
-
-
-plot_values(N_total, mse_total, "Mean squared error", "N", "Error")
-plot_values(N_total, times_total, "CPU time", "N", "Time")
-plot_values(N_total, coef_total, "Weights", "N", "Weights")
+print(coef_total)
+#plot_values(N_total, mse_total, "Mean squared error", "N", "Error")
+#plot_values(N_total, times_total, "CPU time", "N", "Time")
+#plot_values(N_total, coef_total, "Weights", "N", "Weights")
+#plot_stem_weights(coef_total, N_total)
 
 # TODO: fer també un sol plot del mean sq error per N
 
@@ -72,4 +78,3 @@ plot_values(N_total, coef_total, "Weights", "N", "Weights")
 # Plot the cpu-time
 # Explore and comment results
 
-# 2 - Logistic Regression with classification dataset
