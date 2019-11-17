@@ -9,7 +9,6 @@ from sklearn import preprocessing
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.special import legendre
-from scipy.stats import norm
 
 def initialize():
     Qf2, Qf10 = 2, 10
