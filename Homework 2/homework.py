@@ -106,14 +106,15 @@ def polRegression_models(x, Qf, sig, eps, n, label, plot):
     Y = get_y(g, sig, eps)
     
     title = "N = " + str(n) + ", Sigma = " + str(sig) + ", Qf = " + str(Qf)
-    title2 = "H2 - " + title
-    title10 = "H10 - " + title
+    title2 = title + "-H2"
+    title10 = title + "-H10"
 
     x2, y_pred2, lin_reg2, poly_feat2 = polRegression(x, Y, 2, "r", "H2_" + label, title2, plot)
     x10, y_pred10, lin_reg10, poly_feat10 = polRegression(x, Y, 10, "g", "H10_" + label, title10, plot)
     
     x_, x_reshape = get_x(n)
-    y_ = fun_x(x_, Qf, norm_aq)
+    new_g = fun_x(x_, Qf, norm_aq)
+    y_ = get_y(new_g, sig, eps)
     
     # E_out:
     new_y2 = lin_reg2.predict(poly_feat2.fit_transform(x_reshape))
@@ -136,25 +137,30 @@ def write_results_csv(result):
     
 
 def print_different_errors(plot):
-    Ns = np.arange(50, 121, 50)
-    sigmas = np.arange(0.5, 1.05, 0.3)
-    Qfs = np.arange(5, 16, 5)
-    it = 1
+    Ns = np.array([20, 30, 50, 100, 120])
+    sigmas = np.array([0, 0.05, 0.3, 1, 1.5, 2])
+    #Qfs = np.array([1, 2, 5, 10, 25, 50, 100]) Not enough time for all these huge Qfs :(
+    Qfs = np.array([1, 2, 5, 10, 25]) 
+    it = 30
     results = [["N", "Qf", "Sigma", "Mean E2", "Mean E10", "Overfit"]]
     for n in Ns:
         for qf in Qfs:
             for sig in sigmas:
                 err2_total, err10_total = [], []
+                new_plot = False
                 for i in range(it):
+                    label = "N_" + str(n) + "_Qf_" + str(qf) + "_Sigma_" + str(sig)
+                    print(label)
                     x, _ = get_x(n)
                     eps = np.random.standard_normal(n)
-                    label = "N_" + str(n) + "_Qf_" + str(qf) + "_Sigma_" + str(sig)
-                    err2, err10 = polRegression_models(x, qf, sig, eps, n, label, plot)
+                    if plot and i == it - 1:
+                        new_plot = True # This way we only plot the last iteration's plots
+                    err2, err10 = polRegression_models(x, qf, sig, eps, n, label, new_plot)
                     err2_total.append(err2)
                     err10_total.append(err10)
-                err2_mean = statistics.mean(err2_total)
-                err10_mean = statistics.mean(err10_total)
-                overfit = err10_mean - err2_mean
+                err2_mean = round(statistics.mean(err2_total), 4)
+                err10_mean = round(statistics.mean(err10_total), 4)
+                overfit = round(err10_mean - err2_mean,4)
                 results.append([n, qf, sig, err2_mean, err10_mean, overfit])
     
     write_results_csv(results)
@@ -187,5 +193,5 @@ def basic_problem(plot):
 # the basic_problem is just a simple example for a given N, Sigma and Qf
 # Mark plot as True or False, depending on whether the graphic plots want to be shown or not.
 np.random.seed(8)
-basic_problem(plot = True) # First part of the assignment
-print_different_errors(plot = True) # Part d & e
+#basic_problem(plot = True) # First part of the assignment
+print_different_errors(plot = False) # Part d & e
