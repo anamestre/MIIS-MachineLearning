@@ -9,10 +9,11 @@ Created on Sat Nov 23 17:33:30 2019
 Decision Trees: 
 Partition the dataset into a training and a testing set.
 Run a decision tree learning algorithm using the training set. 
-Test the decision tree on the testing dataset and report the total classi
-cation error
-(i.e. 0=1 error). Repeat the experiment with a diferent partition. Plot
-the resulting trees. Are they very similar, or very diferent? Explain why.
+Test the decision tree on the testing dataset and report the total classication error
+(i.e. 0 = 1 error). 
+Repeat the experiment with a diferent partition. 
+Plot the resulting trees. 
+Are they very similar, or very diferent? Explain why.
 Advice: it can be convenient to set a maximum depth for the tree. 
 """
 
