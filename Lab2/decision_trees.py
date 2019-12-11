@@ -61,6 +61,6 @@ def build_decision_tree(file, test_size, max_depth, image_name):
     plot(clf, image_name)
     
 
-file = "cod-rna.txt"
-build_decision_tree(file, 0.2, 20, "first_tree.png")
-build_decision_tree(file, 0.5, 20, "second_tree.png")
+file = "breast-cancer_scale.txt"
+build_decision_tree(file, 0.2, 5, "first_tree.png")
+build_decision_tree(file, 0.6, 5, "second_tree.png")
